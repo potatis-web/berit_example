@@ -6,19 +6,20 @@ import { scryptSync, timingSafeEqual } from "node:crypto";
 
 export const login = form(
   v.object({
-    phone: v.pipe(v.string(), v.nonEmpty()),
+    name: v.pipe(v.string(), v.nonEmpty()),
     password: v.pipe(v.string(), v.nonEmpty()),
   }),
-  async ({ phone, password }) => {
+  async ({ name, password }) => {
     const { cookies } = getRequestEvent();
 
-    let user = await db.orm.public.User.where({ phone }).first();
+    let user = await db.orm.public.User.first({ name });
 
     if (user) {
       const attempt = scryptSync(password, user.salt, 64);
       if (timingSafeEqual(Buffer.from(user.hash, "hex"), attempt)) {
-        let session = await db.orm.public.Session.create({ userId: user.id });
-        cookies.set("session_id", session.id);
+        const uuid = crypto.randomUUID()
+        await db.orm.public.User.where({ id: user.id }).update({ sessionid: uuid})
+        cookies.set("session_id", uuid);
         redirect(307, "/");
       }
     }

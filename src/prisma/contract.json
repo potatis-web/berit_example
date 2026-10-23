@@ -4,20 +4,16 @@
   "target": "postgres",
   "profileHash": "3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2",
   "roots": {
-    "Bid": {
-      "model": "Bid",
-      "namespace": "public"
-    },
-    "Item": {
-      "model": "Item",
-      "namespace": "public"
-    },
-    "Session": {
-      "model": "Session",
+    "Motion": {
+      "model": "Motion",
       "namespace": "public"
     },
     "User": {
       "model": "User",
+      "namespace": "public"
+    },
+    "Vote": {
+      "model": "Vote",
       "namespace": "public"
     }
   },
@@ -25,22 +21,8 @@
     "namespaces": {
       "public": {
         "models": {
-          "Bid": {
+          "Motion": {
             "fields": {
-              "createdAt": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/timestamptz-temporal@1",
-                  "kind": "scalar"
-                }
-              },
-              "creatorId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
               "id": {
                 "nullable": false,
                 "type": {
@@ -48,94 +30,7 @@
                   "kind": "scalar"
                 }
               },
-              "itemId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
-              "price": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/int4@1",
-                  "kind": "scalar"
-                }
-              }
-            },
-            "relations": {
-              "creator": {
-                "cardinality": "N:1",
-                "nullable": false,
-                "on": {
-                  "localFields": [
-                    "creatorId"
-                  ],
-                  "targetFields": [
-                    "id"
-                  ]
-                },
-                "to": {
-                  "model": "User",
-                  "namespace": "public"
-                }
-              },
-              "item": {
-                "cardinality": "N:1",
-                "nullable": false,
-                "on": {
-                  "localFields": [
-                    "itemId"
-                  ],
-                  "targetFields": [
-                    "id"
-                  ]
-                },
-                "to": {
-                  "model": "Item",
-                  "namespace": "public"
-                }
-              }
-            },
-            "storage": {
-              "fields": {
-                "createdAt": {
-                  "column": "createdAt"
-                },
-                "creatorId": {
-                  "column": "creatorId"
-                },
-                "id": {
-                  "column": "id"
-                },
-                "itemId": {
-                  "column": "itemId"
-                },
-                "price": {
-                  "column": "price"
-                }
-              },
-              "namespaceId": "public",
-              "table": "Bid"
-            }
-          },
-          "Item": {
-            "fields": {
-              "asking_price": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/int4@1",
-                  "kind": "scalar"
-                }
-              },
-              "description": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
-              "id": {
+              "text": {
                 "nullable": false,
                 "type": {
                   "codecId": "pg/text@1",
@@ -144,69 +39,18 @@
               }
             },
             "relations": {
-              "bids": {
+              "votes": {
                 "cardinality": "1:N",
                 "on": {
                   "localFields": [
                     "id"
                   ],
                   "targetFields": [
-                    "itemId"
+                    "motionid"
                   ]
                 },
                 "to": {
-                  "model": "Bid",
-                  "namespace": "public"
-                }
-              }
-            },
-            "storage": {
-              "fields": {
-                "asking_price": {
-                  "column": "asking_price"
-                },
-                "description": {
-                  "column": "description"
-                },
-                "id": {
-                  "column": "id"
-                }
-              },
-              "namespaceId": "public",
-              "table": "Item"
-            }
-          },
-          "Session": {
-            "fields": {
-              "id": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
-              "userId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              }
-            },
-            "relations": {
-              "user": {
-                "cardinality": "N:1",
-                "nullable": false,
-                "on": {
-                  "localFields": [
-                    "userId"
-                  ],
-                  "targetFields": [
-                    "id"
-                  ]
-                },
-                "to": {
-                  "model": "User",
+                  "model": "Vote",
                   "namespace": "public"
                 }
               }
@@ -216,12 +60,12 @@
                 "id": {
                   "column": "id"
                 },
-                "userId": {
-                  "column": "userId"
+                "text": {
+                  "column": "text"
                 }
               },
               "namespaceId": "public",
-              "table": "Session"
+              "table": "Motion"
             }
           },
           "User": {
@@ -247,53 +91,22 @@
                   "kind": "scalar"
                 }
               },
-              "phone": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
               "salt": {
                 "nullable": false,
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
                 }
-              }
-            },
-            "relations": {
-              "bids": {
-                "cardinality": "1:N",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "creatorId"
-                  ]
-                },
-                "to": {
-                  "model": "Bid",
-                  "namespace": "public"
-                }
               },
-              "sessions": {
-                "cardinality": "1:N",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "userId"
-                  ]
-                },
-                "to": {
-                  "model": "Session",
-                  "namespace": "public"
+              "sessionid": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
                 }
               }
             },
+            "relations": {},
             "storage": {
               "fields": {
                 "hash": {
@@ -305,15 +118,99 @@
                 "name": {
                   "column": "name"
                 },
-                "phone": {
-                  "column": "phone"
-                },
                 "salt": {
                   "column": "salt"
+                },
+                "sessionid": {
+                  "column": "sessionid"
                 }
               },
               "namespaceId": "public",
               "table": "User"
+            }
+          },
+          "Vote": {
+            "fields": {
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "motionid": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "userid": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "value": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "motion": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "motionid"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Motion",
+                  "namespace": "public"
+                }
+              },
+              "user": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "userid"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "User",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "id": {
+                  "column": "id"
+                },
+                "motionid": {
+                  "column": "motionid"
+                },
+                "userid": {
+                  "column": "userid"
+                },
+                "value": {
+                  "column": "value"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Vote"
             }
           }
         }
@@ -325,116 +222,14 @@
       "public": {
         "entries": {
           "table": {
-            "Bid": {
+            "Motion": {
               "columns": {
-                "createdAt": {
-                  "codecId": "pg/timestamptz-temporal@1",
-                  "dataType": "pg/timestamptz",
-                  "default": {
-                    "expression": "now()",
-                    "kind": "function"
-                  },
-                  "nullable": false
-                },
-                "creatorId": {
-                  "codecId": "pg/text@1",
-                  "dataType": "pg/text",
-                  "nullable": false
-                },
                 "id": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
                   "nullable": false
                 },
-                "itemId": {
-                  "codecId": "pg/text@1",
-                  "dataType": "pg/text",
-                  "nullable": false
-                },
-                "price": {
-                  "codecId": "pg/int4@1",
-                  "dataType": "pg/int4",
-                  "nullable": false
-                }
-              },
-              "foreignKeys": [
-                {
-                  "index": {
-                    "name": "Bid_creatorId_idx_3a77d800"
-                  },
-                  "source": {
-                    "columns": [
-                      "creatorId"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "Bid"
-                  },
-                  "target": {
-                    "columns": [
-                      "id"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "User"
-                  }
-                },
-                {
-                  "index": {
-                    "name": "Bid_itemId_idx_41357140"
-                  },
-                  "source": {
-                    "columns": [
-                      "itemId"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "Bid"
-                  },
-                  "target": {
-                    "columns": [
-                      "id"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "Item"
-                  }
-                }
-              ],
-              "indexes": [
-                {
-                  "columns": [
-                    "creatorId"
-                  ],
-                  "name": "Bid_creatorId_idx_3a77d800",
-                  "prefix": "Bid_creatorId_idx",
-                  "unique": false
-                },
-                {
-                  "columns": [
-                    "itemId"
-                  ],
-                  "name": "Bid_itemId_idx_41357140",
-                  "prefix": "Bid_itemId_idx",
-                  "unique": false
-                }
-              ],
-              "primaryKey": {
-                "columns": [
-                  "id"
-                ]
-              },
-              "uniques": []
-            },
-            "Item": {
-              "columns": {
-                "asking_price": {
-                  "codecId": "pg/int4@1",
-                  "dataType": "pg/int4",
-                  "nullable": false
-                },
-                "description": {
-                  "codecId": "pg/text@1",
-                  "dataType": "pg/text",
-                  "nullable": false
-                },
-                "id": {
+                "text": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
                   "nullable": false
@@ -442,57 +237,6 @@
               },
               "foreignKeys": [],
               "indexes": [],
-              "primaryKey": {
-                "columns": [
-                  "id"
-                ]
-              },
-              "uniques": []
-            },
-            "Session": {
-              "columns": {
-                "id": {
-                  "codecId": "pg/text@1",
-                  "dataType": "pg/text",
-                  "nullable": false
-                },
-                "userId": {
-                  "codecId": "pg/text@1",
-                  "dataType": "pg/text",
-                  "nullable": false
-                }
-              },
-              "foreignKeys": [
-                {
-                  "index": {
-                    "name": "Session_userId_idx_a489d58a"
-                  },
-                  "source": {
-                    "columns": [
-                      "userId"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "Session"
-                  },
-                  "target": {
-                    "columns": [
-                      "id"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "User"
-                  }
-                }
-              ],
-              "indexes": [
-                {
-                  "columns": [
-                    "userId"
-                  ],
-                  "name": "Session_userId_idx_a489d58a",
-                  "prefix": "Session_userId_idx",
-                  "unique": false
-                }
-              ],
               "primaryKey": {
                 "columns": [
                   "id"
@@ -517,12 +261,12 @@
                   "dataType": "pg/text",
                   "nullable": false
                 },
-                "phone": {
+                "salt": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
                   "nullable": false
                 },
-                "salt": {
+                "sessionid": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
                   "nullable": false
@@ -538,10 +282,98 @@
               "uniques": [
                 {
                   "columns": [
-                    "phone"
+                    "name"
                   ]
                 }
               ]
+            },
+            "Vote": {
+              "columns": {
+                "id": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "motionid": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "userid": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "value": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "Vote_motionid_idx_32bbd510"
+                  },
+                  "source": {
+                    "columns": [
+                      "motionid"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Vote"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Motion"
+                  }
+                },
+                {
+                  "index": {
+                    "name": "Vote_userid_idx_dbef1505"
+                  },
+                  "source": {
+                    "columns": [
+                      "userid"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Vote"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "User"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "motionid"
+                  ],
+                  "name": "Vote_motionid_idx_32bbd510",
+                  "prefix": "Vote_motionid_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "userid"
+                  ],
+                  "name": "Vote_userid_idx_dbef1505",
+                  "prefix": "Vote_userid_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
             }
           }
         },
@@ -549,10 +381,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "131c8b57222290bd0f371c3bd1c9724a14ed8bf67bc05559368960d930e49761"
+    "storageHash": "8b2c7de99dfd8ac36c50675e002edf78ed998fa311848d364c5bfe3d906cce42"
   },
   "execution": {
-    "executionHash": "dcebbc3cccf095acb55bef1f9df26333810cf885aa9f227309fcf931cefa989d",
+    "executionHash": "15decf5d2352ef7a715e550cca640fc14ce639fda4293af9b3d886f6fc116969",
     "mutations": {
       "defaults": [
         {
@@ -561,29 +393,7 @@
             "kind": "generator"
           },
           "ref": {
-            "entry": "Bid",
-            "field": "id",
-            "namespace": "public"
-          }
-        },
-        {
-          "onCreate": {
-            "id": "uuidv4",
-            "kind": "generator"
-          },
-          "ref": {
-            "entry": "Item",
-            "field": "id",
-            "namespace": "public"
-          }
-        },
-        {
-          "onCreate": {
-            "id": "uuidv4",
-            "kind": "generator"
-          },
-          "ref": {
-            "entry": "Session",
+            "entry": "Motion",
             "field": "id",
             "namespace": "public"
           }
@@ -595,6 +405,28 @@
           },
           "ref": {
             "entry": "User",
+            "field": "id",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "User",
+            "field": "sessionid",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Vote",
             "field": "id",
             "namespace": "public"
           }

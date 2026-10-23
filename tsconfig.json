@@ -6,7 +6,8 @@
   "moduleResolution": "bundler",
   "resolveJsonModule": true,
   "types": [
-   "node"
+    "$app/types",
+    "node"
   ]
 	},
 	"include": ["src", "vite.config.ts"]
